@@ -2,8 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 import { registerSchema, RegisterSchema } from "@/validation/userSchemas";
-import { registerUser } from "../actions";
+import { registerUser } from "@/actions";
 import {
   Card,
   CardContent,
@@ -38,77 +39,100 @@ export default function Register() {
       const user = await registerUser(values);
       console.log("User registered successfully:", user);
     } catch (error: any) {
-      console.error("Registration failed:", error);
+      form.setError("root", {
+        type: "manual",
+        message: error.message || "An unexpected error occurred",
+      });
     }
   }
 
   return (
     <main className="flex h-screen w-full items-center justify-center">
-      <Card className="w-[350px] space-y-4 p-6 shadow-md">
-        <CardHeader>
-          <CardTitle>Register</CardTitle>
-          <CardDescription>Register for a new account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="email@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="********"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="passwordConfirm"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="********"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Register
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
-      </Card>
+      {form.formState.isSubmitSuccessful ? (
+        <Card className="w-[350px] space-y-4 p-6 shadow-md">
+          <CardHeader>
+            <CardTitle>Your account has been created</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Button className="w-full">
+              <Link href="/login">Login to your account</Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="w-[350px] space-y-4 p-6 shadow-md">
+          <CardHeader>
+            <CardTitle>Register</CardTitle>
+            <CardDescription>Register for a new account</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              {form.formState.errors.root && (
+                <div className="text-red-500 text-sm mb-4">
+                  {form.formState.errors.root.message}
+                </div>
+              )}
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <fieldset
+                  disabled={form.formState.isSubmitting}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="email@example.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="********"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="passwordConfirm"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="********"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full">
+                    Register
+                  </Button>
+                </fieldset>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      )}
     </main>
   );
 }
