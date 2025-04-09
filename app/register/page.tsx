@@ -38,10 +38,10 @@ export default function Register() {
     try {
       const user = await registerUser(values);
       console.log("User registered successfully:", user);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as { message?: string };
       form.setError("root", {
-        type: "manual",
-        message: error.message || "An unexpected error occurred",
+        message: err.message || "An unexpected error occurred",
       });
     }
   }
@@ -131,6 +131,14 @@ export default function Register() {
               </form>
             </Form>
           </CardContent>
+          <CardFooter className="flex-col space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-500 hover:underline">
+                Login
+              </Link>
+            </p>
+          </CardFooter>
         </Card>
       )}
     </main>
