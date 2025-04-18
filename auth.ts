@@ -54,4 +54,22 @@ export const {
       },
     }),
   ],
+  callbacks: {
+    // usually not needed, here we are fixing a bug in next-auth
+    // might not be needed in future versions of next-auth
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+
+      return token;
+    },
+    session({ session, token }: any) {
+      // Add the user ID from the token to the session object
+      if (session?.user && token?.id) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
+  },
 });
