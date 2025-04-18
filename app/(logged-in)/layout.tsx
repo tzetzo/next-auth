@@ -34,11 +34,7 @@ export default async function LoggedInLayout({
               Change Password
             </Link>
           </div>
-          {isLoggedIn && (
-            <span>
-              Logged in as {user?.email} <LogoutButton />
-            </span>
-          )}
+          {isLoggedIn && <LogoutButton />}
         </div>
       </nav>
       {children}
