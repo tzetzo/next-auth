@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import LogoutButton from "@/components/LogoutButton";
-import { auth } from "@/auth";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,26 +22,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-  const user = session?.user;
-  const isLoggedIn = !!user;
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="bg-white dark:bg-black">
-          <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold">Welcome to the App</h1>
-            {isLoggedIn ? (
-              <p className="text-green-500">
-                Logged in as {user?.email} <LogoutButton />
-              </p>
-            ) : (
-              <p className="text-red-500">Not logged in</p>
-            )}
-          </div>
-        </div>
         {children}
       </body>
     </html>
