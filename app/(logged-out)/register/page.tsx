@@ -68,9 +68,7 @@ export default function Register() {
           <CardContent>
             <Form {...form}>
               {form.formState.errors.root && (
-                <div className="text-red-500 text-sm mb-4">
-                  {form.formState.errors.root.message}
-                </div>
+                <FormMessage>{form.formState.errors.root.message}</FormMessage>
               )}
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <fieldset

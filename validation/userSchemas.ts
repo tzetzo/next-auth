@@ -30,3 +30,17 @@ export const loginSchema = z.object({
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
+
+// Full user change password schema
+export const changePasswordSchema = z
+  .object({
+    currentPassword: passwordSchema,
+    newPassword: passwordSchema,
+    newPasswordConfirm: z.string(),
+  })
+  .refine((data) => data.newPassword === data.newPasswordConfirm, {
+    message: "Passwords must match",
+    path: ["newPasswordConfirm"], // This specifies where the error will appear
+  });
+
+export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;
