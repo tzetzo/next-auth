@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import Link from "next/link";
 import { loginSchema, LoginSchema } from "@/validation/userSchemas";
 import { loginUser } from "@/actions";
 import {
@@ -25,8 +24,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
   const router = useRouter();
 
   const form = useForm<LoginSchema>({
@@ -73,7 +74,14 @@ export default function Login() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="email@example.com" {...field} />
+                        <Input
+                          placeholder="email@example.com"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setEmail(e.target.value);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -113,7 +121,9 @@ export default function Login() {
           <p className="text-sm text-muted-foreground">
             Forgot password?{" "}
             <Link
-              href="/password-reset"
+              href={`/request-password-reset${
+                email ? `?email=${encodeURIComponent(email)}` : ""
+              }`}
               className="text-blue-500 hover:underline"
             >
               Reset it

@@ -44,3 +44,23 @@ export const changePasswordSchema = z
   });
 
 export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;
+
+export const requestPasswordResetSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+});
+
+export type RequestPasswordResetSchema = z.infer<
+  typeof requestPasswordResetSchema
+>;
+
+export const resetPasswordSchema = z
+  .object({
+    newPassword: passwordSchema,
+    newPasswordConfirm: z.string(),
+  })
+  .refine((data) => data.newPassword === data.newPasswordConfirm, {
+    message: "Passwords must match",
+    path: ["newPasswordConfirm"],
+  });
+
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;
