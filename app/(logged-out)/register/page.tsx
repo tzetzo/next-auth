@@ -36,8 +36,7 @@ export default function Register() {
 
   async function onSubmit(values: RegisterSchema) {
     try {
-      const user = await registerUser(values);
-      console.log("User registered successfully:", user);
+      await registerUser(values);
     } catch (error: unknown) {
       const err = error as { message?: string };
       form.setError("root", {
