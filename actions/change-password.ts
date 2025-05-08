@@ -11,7 +11,6 @@ import { hash, compare } from "bcryptjs";
 import { auth } from "@/auth"; // Import the `auth` function to get the session
 
 export async function changePassword(data: ChangePasswordSchema) {
-  console.log("data:", data);
   // Validate the input using Zod
   const validatedData = changePasswordSchema.safeParse(data);
   if (!validatedData.success) {

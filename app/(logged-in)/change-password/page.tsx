@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 import {
   changePasswordSchema,
   ChangePasswordSchema,
@@ -12,7 +11,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -40,7 +38,7 @@ export default function ChangePasword() {
 
   async function onSubmit(values: ChangePasswordSchema) {
     try {
-      const user = await changePassword(values);
+      await changePassword(values);
       form.reset();
       toast.success("Password successfully changed", {
         description: "Your password has been updated",
