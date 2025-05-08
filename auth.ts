@@ -4,6 +4,7 @@ import db from "./db/drizzle";
 import { users } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { compare } from "bcryptjs";
+import { authenticator } from "otplib";
 
 export const {
   handlers: { GET, POST },
@@ -16,15 +17,17 @@ export const {
       credentials: {
         email: {},
         password: {},
+        otp: {},
       },
       async authorize(credentials) {
         if (!credentials) {
           throw new Error("Invalid credentials");
         }
 
-        const { email, password } = credentials as {
+        const { email, password, otp } = credentials as {
           email: string;
           password: string;
+          otp?: string;
         };
 
         // Check if the user exists
@@ -45,6 +48,20 @@ export const {
         );
         if (!isPasswordValid) {
           throw new Error("Invalid email or password.");
+        }
+
+        if (existingUser?.twoFactorActivated) {
+          // Check if OTP is valid
+          if (!otp) {
+            throw new Error("OTP is required for two-factor authentication.");
+          }
+          const isValid = authenticator.check(
+            otp,
+            existingUser.twoFactorSecret as string
+          );
+          if (!isValid) {
+            throw new Error("Invalid OTP. Please try again.");
+          }
         }
 
         return {

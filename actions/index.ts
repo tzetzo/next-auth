@@ -3,3 +3,7 @@ export { loginUser } from "./login-user";
 export { changePassword } from "./change-password";
 export { requestPasswordReset } from "./request-password-reset";
 export { resetPassword } from "./reset-password";
+export { get2FAsecret } from "./get-2fa-secret";
+export { activate2FA } from "./activate2fa";
+export { deactivate2FA } from "./deactivate2fa";
+export { preLoginCheck } from "./pre-login-check";

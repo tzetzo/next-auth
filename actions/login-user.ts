@@ -16,6 +16,7 @@ export async function loginUser(data: LoginSchema) {
       redirect: false,
       email: validatedData.data.email,
       password: validatedData.data.password,
+      otp: validatedData.data.otp,
     });
 
     if (result?.error) {

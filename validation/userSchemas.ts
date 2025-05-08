@@ -9,6 +9,12 @@ export const passwordSchema = z
   .min(5, { message: "Password must be at least 5 characters." })
   .max(50, { message: "Password must not exceed 50 characters." });
 
+// OTP validation schema
+export const otpSchema = z
+  .string()
+  .length(6, { message: "OTP must be exactly 6 characters." })
+  .optional();
+
 // Full user registration schema
 export const registerSchema = z
   .object({
@@ -27,6 +33,7 @@ export type RegisterSchema = z.infer<typeof registerSchema>;
 export const loginSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
+  otp: otpSchema,
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;
